@@ -21,11 +21,6 @@ const playAgainButton = document.querySelector(".play-again hide")
 
 let word = "magnolia"
 
-// // Write a Function to Add Placeholders for Each Letter
-
-// // Create and name a function to update the paragraph’s innerText for the “words-in-progress” element with circle symbols (●) to represent each letter in the word. 
-// The symbols will stay on the screen until the correct letter is guessed (in a future step). Hint: Copy and paste the ● symbol into your code!
-// // Call the function and pass it the word variable as the argument. You should see 8 circle symbols on the screen, one for each letter in the word “magnolia.” Hint: You’ll need to use an array and then join it back to a string using the .join("") method.
 
 function makePlaceholderSymbols(word) {
     // first get count of word letters
@@ -39,23 +34,53 @@ function makePlaceholderSymbols(word) {
 makePlaceholderSymbols(word)
 
 
-// // Add an Event Listener for the Button
 
-// // Add an event listener for when a player clicks the Guess button. In the callback function, add a parameter for the event: e.
-// // Because you’re working with a form, you want to prevent the default behavior of clicking a button, the form submitting, and then reloading the page. 
-// To prevent this reloading behavior, add this line of code at the top of the callback function: e.preventDefault();.
-// // Create and name a variable to capture the value of the input. Log out the value of the variable capturing the input. 
-// Then, empty the value of the input. You should see the letter you enter into the input field in the console when the Guess button is clicked. 
-// // In the command line, add and commit your changes. Push the changes up to GitHub. Copy the link to your repo and submit it below. Part 1 of the project is done! 😀
+guessLetterButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    // Empty message paragraph
+    message.innerText = "";
+    // Let's grab what was entered in the input
+    const guess = letterInput.value;
+    // Let's make sure that it is a single letter
+    const goodGuess = validateInput(guess);
+  
+    if (goodGuess) {
+      // We've got a letter! Let's guess!
+      makeGuess(guess);
+    }
+    letterInput.value = "";
+  });
 
-guessButton.addEventListener ('click', function(e){
-    e.preventDefault()
-     let letterInput = guessInput.value 
-    // alert(letterInput)
-    guessInput.value = ""
+// Create a Function to Check Player’s Input
 
-})
+// Create and name a function that accepts the input value as a parameter. This function’s purpose is to validate the player’s input.
+// Inside the function, create a variable for the accepted letter sequence: const acceptedLetter = /[a-zA-Z]/. Now your code uses a regular expression to ensure the player inputs a letter!
+// Still inside the function, use a conditional block to check for different scenarios. First, check if the input is empty. Then, check if the player has entered more than one letter. Finally, check if they’ve entered a character that doesn’t match the regular expression pattern. Hint: You’ll need the .match() method here. Each condition should have a message directing the player on what to input. 
+// If all the other conditions aren’t met, the input is a letter, which is what you’re looking for! Return the input.
 
-// button.addEventListener('click', function() {
-//     console.log('Button clicked!');
-//   });
+const validateInput = function (input) {
+    const acceptedLetter = /[a-zA-Z]/ ;
+    if (input.length === 0) {
+        message.innerText = "Please enter a letter.";
+    }
+else if (input.length > 1) {
+    // Did you type more than one letter?
+    message.innerText = "Please enter a single letter.";
+  } else if (!input.match(acceptedLetter)) {
+    // Did you type a number, a special character or some other non letter thing?
+    message.innerText = "Please enter a letter from A to Z.";
+  } else {
+    // We finally got a single letter, omg yay
+    return input;
+  }
+};
+
+const makeGuess = function (guess) {
+    guess = guess.toUpperCase();
+    if (guessedLetters.includes(guess)) {
+      message.innerText = "You already guessed that letter, silly. Try again.";
+    } else {
+      guessedLetters.push(guess);
+      console.log(guessedLetters);
+    }
+  };
